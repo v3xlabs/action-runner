@@ -1,27 +1,24 @@
-FROM ubuntu:22.04
+FROM ghcr.io/actions/actions-runner:2.311.0
 
-RUN apt update
+USER root
 
-RUN apt install -y curl unzip git
+RUN apt-get update && \
+    apt-get install -y curl zip unzip git wget docker.io && \
+    rm -rf /var/lib/apt/lists/*
+
+USER runner
 
 # Install Rustup
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > ./rustup.sh
-RUN chmod +x ./rustup.sh
-RUN ./rustup.sh --default-toolchain none -y
+RUN bash -c "bash <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) --default-toolchain none -y"
 
 # Install Bun
-RUN curl -fsSL https://bun.sh/install > ./bun.sh
-RUN chmod +x ./bun.sh
-RUN ./bun.sh
+RUN curl -fsSL https://bun.sh/install | bash
 
 # Install Nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh > ./nvm.sh
-RUN chmod +x ./nvm.sh
-RUN ./nvm.sh
-RUN bash -c "source ~/.nvm/nvm.sh && nvm install node"
+RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
-# Install pnpm
-RUN bash -c "source ~/.nvm/nvm.sh && npm install -g pnpm"
+# Install Node
+RUN bash -c 'source ~/.nvm/nvm.sh && for version in stable v20 v18 v16; do nvm install $version; done'
 
-# Install Docker
-RUN apt install -y docker.io
+# Install pnpm and yarn
+RUN bash -c 'source ~/.nvm/nvm.sh && nvm use stable && npm install -g pnpm yarn'
