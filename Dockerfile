@@ -14,11 +14,4 @@ RUN bash -c "bash <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) -
 # Install Bun
 RUN curl -fsSL https://bun.sh/install | bash
 
-# Install Nvm
-RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-
-# Install Node
-RUN bash -c 'source ~/.nvm/nvm.sh && for version in stable v20 v18 v16; do nvm install $version; done'
-
-# Install pnpm and yarn
-RUN bash -c 'source ~/.nvm/nvm.sh && nvm use stable && npm install -g pnpm yarn'
+ENV PATH="${PATH}:~/.bun/bin:~/.cargo/bin"
