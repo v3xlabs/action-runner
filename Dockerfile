@@ -10,12 +10,12 @@ RUN apt-get update && \
 USER runner
 
 # Install Rustup
-RUN bash -c "bash <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) --default-toolchain none -y"
+RUN bash -c "bash <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) --default-toolchain stable --profile minimal -y"
 
 # Install Bun
 RUN curl -fsSL https://bun.sh/install | bash
 
-ENV PATH="${PATH}:~/.bun/bin:~/.cargo/bin"
+ENV PATH="${PATH}:/home/runner/.bun/bin:/home/runner/.cargo/bin"
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - &&\
     sudo apt-get install -y nodejs &&\
