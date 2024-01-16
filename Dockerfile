@@ -20,5 +20,8 @@ RUN chmod +x ./nvm.sh
 RUN ./nvm.sh
 RUN bash -c "source ~/.nvm/nvm.sh && nvm install node"
 
+# Install pnpm
+RUN bash -c "source ~/.nvm/nvm.sh && npm install -g pnpm"
+
 # Install Docker
 RUN apt install -y docker.io
